@@ -1,33 +1,38 @@
 import React from 'react';
-import { View, Text, FlatList, Image, StyleSheet, TouchableOpacity } from 'react-native';
-import CartItem from '../components/CartItem';
+import { View, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
+import CartItem from '../components/CartItem'; // ✅ your component
 import { useCart } from '../CartContext';
 
 export default function CartScreen({ navigation }) {
-  const { cart } = useCart();
+  const { cart, updateQuantity, clearCart } = useCart(); // ✅ pulling updateQuantity
+
+  const total = cart.reduce((sum, item) => sum + item.price * (item.quantity ?? 1), 0); // ✅ total includes quantity
 
   return (
     <View style={styles.container}>
-      {/* Logo Placeholder */}
-      <View style={styles.logoContainer}>
-        <Image source={require('../assets/icon.png')} style={styles.logo} />
-        
-      </View>
       <Text style={styles.title}>Your Cart</Text>
-      <Text style={styles.subtitle}>All scanned products appear here</Text>
       {cart.length === 0 ? (
         <Text style={styles.empty}>Cart is empty</Text>
       ) : (
-        <FlatList
-          data={cart}
-          renderItem={({ item }) => <CartItem item={item} />}
-          keyExtractor={(item) => item.barcode}
-          contentContainerStyle={styles.listContent}
-        />
+        <>
+          <FlatList
+            data={cart}
+            renderItem={({ item }) => (
+              <CartItem item={item} onQuantityChange={updateQuantity} /> // ✅ using it here
+            )}
+            keyExtractor={(item) => item.barcode}
+          />
+
+          <Text style={styles.total}>Total: Rs {total}</Text>
+
+          <TouchableOpacity onPress={clearCart} style={styles.clearBtn}>
+            <Text style={styles.clearBtnText}>Clear Cart</Text>
+          </TouchableOpacity>
+        </>
       )}
+
       <TouchableOpacity
         style={styles.homeButton}
-        activeOpacity={0.85}
         onPress={() => navigation.navigate('Home')}
       >
         <Text style={styles.homeButtonText}>Back to Home</Text>
@@ -48,26 +53,11 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     alignItems: 'center',
   },
-  logoPlaceholder: {
+  logo: {
     width: 70,
     height: 70,
     borderRadius: 35,
-    backgroundColor: '#E3F2FD',
-    justifyContent: 'center',
-    alignItems: 'center',
     marginBottom: 8,
-    elevation: 3,
-    shadowColor: '#000',
-    shadowOpacity: 0.15,
-    shadowRadius: 6,
-    shadowOffset: { width: 0, height: 2 },
-  },
-  logoText: {
-    color: '#4FC3F7',
-    fontSize: 20,
-    fontWeight: 'bold',
-    letterSpacing: 2,
-    fontFamily: 'Roboto',
   },
   title: {
     fontSize: 26,
@@ -95,6 +85,24 @@ const styles = StyleSheet.create({
     paddingBottom: 24,
     width: '100%',
   },
+  total: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginTop: 12,
+    textAlign: 'center',
+  },
+  clearBtn: {
+    marginTop: 10,
+    backgroundColor: '#ef5350',
+    borderRadius: 6,
+    paddingVertical: 10,
+    paddingHorizontal: 30,
+  },
+  clearBtnText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 14,
+  },
   homeButton: {
     marginTop: 24,
     backgroundColor: '#4FC3F7',
@@ -113,11 +121,5 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontFamily: 'Roboto',
     textAlign: 'center',
-  },
-  logo: {
-    width: 70,
-    height: 70,
-    borderRadius: 35,
-    marginBottom: 8,
   },
 });

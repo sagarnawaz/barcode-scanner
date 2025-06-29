@@ -18,9 +18,22 @@ export const CartProvider = ({ children }) => {
       return [...prev, { ...product, quantity: 1 }];
     });
   };
+  const updateQuantity = (barcode, delta) => {
+    setCart((prevCart) =>
+      prevCart.map((item) =>
+        item.barcode === barcode
+          ? { ...item, quantity: Math.max((item.quantity ?? 1) + delta, 1) }
+          : item
+      )
+    );
+  };
+
+  const clearCart = () => {
+    setCart([]);
+  };
 
   return (
-    <CartContext.Provider value={{ cart, addToCart }}>
+    <CartContext.Provider value={{ cart, addToCart, updateQuantity, clearCart }}>
       {children}
     </CartContext.Provider>
   );

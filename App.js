@@ -4,6 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import HomeScreen from './screens/HomeScreen';
 import ScanScreen from './screens/ScanScreen';
 import CartScreen from './screens/CartScreen';
+import PaymentScreen from './screens/PaymentScreen';
 import { CartProvider } from './CartContext';
 
 const Stack = createStackNavigator();
@@ -16,6 +17,7 @@ export default function App() {
           <Stack.Screen name="Home" component={HomeScreen} options={{ title: 'Barcode Scanner App' }} />
           <Stack.Screen name="Scan" component={ScanScreen} options={{ title: 'Scan Barcode' }} />
           <Stack.Screen name="Cart" component={CartScreen} options={{ title: 'Cart' }} />
+          <Stack.Screen name="Payment" component={PaymentScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </CartProvider>

@@ -2,6 +2,8 @@ import React from 'react';
 import { View, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
 import CartItem from '../components/CartItem'; // ✅ your component
 import { useCart } from '../CartContext';
+import { useNavigation } from '@react-navigation/native';
+
 
 export default function CartScreen({ navigation }) {
   const { cart, updateQuantity, clearCart } = useCart(); // ✅ pulling updateQuantity
@@ -31,11 +33,17 @@ export default function CartScreen({ navigation }) {
         </>
       )}
 
+      
       <TouchableOpacity
-        style={styles.homeButton}
-        onPress={() => navigation.navigate('Home')}
+        style={[
+          styles.homeButton,
+          cart.length === 0 && { backgroundColor: '#ccc' }
+        ]}
+        activeOpacity={cart.length === 0 ? 1 : 0.85}
+        disabled={cart.length === 0}
+        onPress={() => navigation.navigate('Payment')}
       >
-        <Text style={styles.homeButtonText}>Back to Home</Text>
+        <Text style={styles.homeButtonText}>Checkout</Text>
       </TouchableOpacity>
     </View>
   );

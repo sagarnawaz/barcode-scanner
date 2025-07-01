@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "barcode-scanner",
+    "name": "Barcode Scanner",
     "slug": "barcode-scanner",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -29,9 +29,6 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "plugins": [
-      "expo-barcode-scanner"
-    ],
     "extra": {
       "eas": {
         "projectId": "03242635-dadc-4fc7-82da-d3099c102223"
